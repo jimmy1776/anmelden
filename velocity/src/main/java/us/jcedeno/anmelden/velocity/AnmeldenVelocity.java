@@ -2,6 +2,7 @@ package us.jcedeno.anmelden.velocity;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.PreLoginEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -30,6 +31,19 @@ public class AnmeldenVelocity {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         this.logger.info("Anmelden plugin loaded.");
         // Do anything requiring the velocity api here.
+    }
+
+
+    @Subscribe
+    public void onPrelogin(PreLoginEvent e){
+        var username = e.getUsername();
+        /**
+         * TODO: 1. Validate the user hitting mojang's API.
+         * 2. If the user is valid, allow them to login. Otherwise, ask for password.
+         * 3. Restore skins.
+         */
+        // Esto simula "online-mode" en un offline mode sever
+        e.setResult(PreLoginEvent.PreLoginComponentResult.forceOnlineMode());
     }
 
 }

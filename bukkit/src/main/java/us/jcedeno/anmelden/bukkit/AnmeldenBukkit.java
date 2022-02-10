@@ -3,6 +3,7 @@ package us.jcedeno.anmelden.bukkit;
 import java.util.function.Function;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import cloud.commandframework.ArgumentDescription;
@@ -82,14 +83,27 @@ public class AnmeldenBukkit extends JavaPlugin {
         builder = builder.handler(context -> {
             /** Send message to player */
             var sender = context.getSender();
-            sender.sendMessage(MM.parse("<green>Hellow <yellow>" + sender.getName() + "<green>!"));
+            /** Name parameter */
+            var name = context.get("Name for the game.").toString();
+            /** Hours parameter */
+            var hour = context.getOptional("Hours").isPresent() ? (double) context.get("Hours") : 2;
+            /** Upgraded parameter */
+            var upgraded = context.getOptional("Upgraded Hardware").isPresent()
+                    ? (Boolean) context.getOptional("Upgraded Hardware").get()
+                    : false;
+            /** Send message to player */
+            sender.sendMessage(MM.parse("<green>Hellow <yellow>" + sender.getName() + "<green>!\n"
+                    + "<yellow>You have requested a game named <green>" + name + "<yellow> with <green>" + hour
+                    + "<yellow> hours and <green>" + upgraded + "<yellow> upgraded hardware."));
         });
 
         /** register with manager. */
         manager.command(builder);
     }
 
-    
+    void changeSkin(Player player) {
+        player.getPlayerProfile();
+    }
 
     @Override
     public void onDisable() {
